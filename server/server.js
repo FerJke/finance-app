@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
+require("./db/migrations");
+
 const app = express();
 const PORT = 3000;
 
@@ -10,7 +12,7 @@ app.use(express.json());
 
 // тестовий маршрут
 app.get("/", (req, res) => {
-  res.send("Express server with CORS is running 🚀");
+  res.send("Express + SQLite server is running  🚀");
 });
 
 // запуск сервера
