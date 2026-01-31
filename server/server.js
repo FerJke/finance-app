@@ -1,18 +1,17 @@
-const http = require("http");
+const express = require("express");
 
+const app = express();
 const PORT = 3000;
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/" && req.method === "GET") {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("Server is running 🚀");
-    return;
-  }
+// middleware для JSON (знадобиться дуже скоро)
+app.use(express.json());
 
-  res.writeHead(404, { "Content-Type": "text/plain" });
-  res.end("Not found");
+// тестовий маршрут
+app.get("/", (req, res) => {
+  res.send("Express server is running 🚀");
 });
 
-server.listen(PORT, () => {
+// запуск сервера
+app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
