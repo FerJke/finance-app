@@ -41,7 +41,21 @@ function App() {
     .then(res => res.json())
     .then(data => setExpenses(data))
     .catch(err => console.error(err));
-}, []);
+  }, []);
+  
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/expenses/${id}`, {
+        method: 'DELETE'
+      });
+
+      setExpenses(prev =>
+        prev.filter(expense => expense.id !== id)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="container">
@@ -101,6 +115,12 @@ function App() {
         {expenses.map(expense => (
           <li key={expense.id}>
             {expense.title} — {expense.amount} грн ({expense.category})
+            <button
+              style={{ marginLeft: '10px' }}
+              onClick={() => handleDelete(expense.id)}
+            >
+              🗑️
+            </button>
           </li>
         ))}
       </ul>
