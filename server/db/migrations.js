@@ -14,4 +14,26 @@ db.prepare(
 `,
 ).run();
 
+// створимо таблицу категорій, якщо її ще немає
+db.prepare(
+  `
+  CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY  KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+  )  
+`,
+).run();
+
+const categories = [
+  "Їжа",
+  "Транспорт",
+  "Розваги",
+  "Комунальні послуги",
+  "Покупки",
+  "Інше",
+];
+const insert = db.prepare("INSERT OR IGNORE INTO categories (name) VALUES (?)");
+
+categories.forEach((name) => insert.run(name));
+
 console.log("Database migrated: expenses table ready");

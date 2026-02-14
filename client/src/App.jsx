@@ -1,40 +1,9 @@
 import { useState, useEffect } from 'react';
+import ExpenseForm from './components/ExpenseForm';
+import ExpenseList from './components/ExpenseList';
 
 function App() {
-  const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
-  const [date, setDate] = useState('');
-
   const [expenses, setExpenses] = useState([]);
-
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-
-    const expense = {
-      title,
-      amount: Number(amount),
-      category,
-      date
-    };
-
-    try {
-      const response = await fetch('http://localhost:3000/expenses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(expense)
-      });
-
-      const data = await response.json();
-      console.log('Збережено:', data);
-      setExpenses(prev => [data, ...prev]);
-
-    } catch (error) {
-      console.error('Помилка:', error);
-    }
-  };
 
   useEffect(() => {
   fetch('http://localhost:3000/expenses')
@@ -42,8 +11,18 @@ function App() {
     .then(data => setExpenses(data))
     .catch(err => console.error(err));
   }, []);
+
+  const addExpense = (expense) => {
+    setExpenses(prev => [...prev, expense]);
+  };
   
-  const handleDelete = async (id) => {
+  const deleteExpense = async (id) => {
+    const confirmed = window.confirm(
+      'Ви впевнені, що хочете видалити витрату?'
+    );
+
+    if (!confirmed) return;
+
     try {
       await fetch(`http://localhost:3000/expenses/${id}`, {
         method: 'DELETE'
@@ -60,70 +39,8 @@ function App() {
   return (
     <div className="container">
       <h1>Finance App</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Назва витрати:
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Сума:
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Категорія:
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Дата:
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <button type="submit">Додати</button>
-      </form>
-
-      <h2>Витрати</h2>
-
-      <ul>
-        {expenses.map(expense => (
-          <li key={expense.id}>
-            {expense.title} — {expense.amount} грн ({expense.category})
-            <button
-              style={{ marginLeft: '10px' }}
-              onClick={() => handleDelete(expense.id)}
-            >
-              🗑️
-            </button>
-          </li>
-        ))}
-      </ul>
+      <ExpenseForm onAdd={addExpense} />
+      <ExpenseList expenses={expenses} deleteExpense={deleteExpense} />
     </div>
   );
 }

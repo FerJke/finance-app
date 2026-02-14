@@ -4,6 +4,7 @@ const cors = require("cors");
 require("./db/migrations");
 
 const expensesRoutes = require("./routes/expenses.js");
+const categoriesRoutes = require("./routes/categories.js");
 
 const app = express();
 const PORT = 3000;
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // routes
 app.use("/expenses", expensesRoutes);
+app.use("/categories", categoriesRoutes);
 
 // тестовий маршрут
 app.get("/", (req, res) => {
