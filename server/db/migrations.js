@@ -7,7 +7,7 @@ db.prepare(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     amount REAL NOT NULL,
-    category TEXT NOT NULL,
+    category_id INTEGER NOT NULL,
     date TEXT NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
   )

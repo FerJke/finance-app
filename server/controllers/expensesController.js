@@ -11,27 +11,27 @@ const getExpenses = (req, res) => {
 
 // POST /expenses
 const createExpense = (req, res) => {
-  const { title, amount, category, date } = req.body;
+  const { title, amount, category_id, date } = req.body;
 
   // базова валідація
-  if (!title || !amount || !category || !date) {
+  if (!title || !amount || !category_id || !date) {
     return res.status(400).json({ error: "All fields are required." });
   }
 
   const result = db
     .prepare(
       `
-    INSERT INTO expenses (title, amount, category, date)
+    INSERT INTO expenses (title, amount, category_id, date)
     VALUES (?, ?, ?, ?)
   `,
     )
-    .run(title, amount, category, date);
+    .run(title, amount, category_id, date);
 
   res.status(201).json({
     id: result.lastInsertRowid,
     title,
     amount,
-    category,
+    category_id,
     date,
   });
 };

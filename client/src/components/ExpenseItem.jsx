@@ -1,6 +1,7 @@
 function ExpenseItem({ expense, deleteExpense }) {
+  console.log(expense);
   return (
-    <li key={expense.id}>
+    <li>
       {expense.title} — {expense.amount} грн ({expense.category})
       <button
         style={{ marginLeft: '10px' }}

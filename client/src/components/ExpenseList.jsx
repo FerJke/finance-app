@@ -11,6 +11,7 @@ function ExpenseList({ expenses, deleteExpense }) {
         <ul>
           {expenses.map(expense => (
             <ExpenseItem
+              key={expense.id}
               expense={expense}
               deleteExpense={deleteExpense}
             />
